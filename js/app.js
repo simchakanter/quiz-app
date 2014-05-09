@@ -59,6 +59,7 @@ var question4 = new Question(
 
 var quizQuestions = [question1, question2, question3, question4];
 var questionNumber = 0;
+var score = 0;
 
 $(document).ready(function() {
   $('#start').click(function() {
@@ -71,8 +72,21 @@ $(document).ready(function() {
       var submittedAnswer = quizQuestions[questionNumber].options[$('input[name=response]:checked').val()];
       if (quizQuestions[questionNumber].validate(submittedAnswer) === true ) {
         console.log("Correct");
+        score++;
+        console.log(score);
       } else {
         console.log("Nope");
+      }
+      if (questionNumber < quizQuestions.length - 1) {
+        questionNumber++;
+        loadQuestion(questionNumber);
+      } else {
+        $("#questions").hide();
+        $("#message").text("Done! Your score is " + score + " out of " + quizQuestions.length);
+        $("#start").show();
+        console.log("The quiz is done. Your score is " + score);
+        questionNumber = 0;
+        score = 0;
       }
     });
   });
@@ -80,8 +94,10 @@ $(document).ready(function() {
 
 function loadQuestion(number) {
   $('#message').text(quizQuestions[number].name);
+  $('#options-container').empty();
   for (var option in quizQuestions[number].options) {
     $("<input type='radio' name='response' value=" + option + ">" + quizQuestions[number].options[option] + "<br>").appendTo('#options-container');
   }
+  $('#count').text(number + 1);
 }
 

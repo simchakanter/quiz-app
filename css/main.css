@@ -34,6 +34,11 @@ h2 {
   margin-bottom: 20px;
 }
 
+#question-counter {
+  margin-top: 20px;
+  text-align: center;
+}
+
 #questions {
   display: none;
 }
