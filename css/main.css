@@ -49,3 +49,7 @@ button {
   display: block;
 }
 
+#restart {
+  display: none;
+}
+

@@ -68,12 +68,14 @@ $(document).ready(function() {
     $('#questions').show();
     $('#submit').click(function(event) {
       event.preventDefault();
-      // var correctAnswer = quizQuestions[questionNumber].answer;
       var submittedAnswer = quizQuestions[questionNumber].options[$('input[name=response]:checked').val()];
       if (quizQuestions[questionNumber].validate(submittedAnswer) === true ) {
         console.log("Correct");
         score++;
         console.log(score);
+      } else if ($('input[name=response]:checked').val() === undefined ){
+        console.log("No answer provided");
+        return;
       } else {
         console.log("Nope");
       }
@@ -83,11 +85,15 @@ $(document).ready(function() {
       } else {
         $("#questions").hide();
         $("#message").text("Done! Your score is " + score + " out of " + quizQuestions.length);
-        $("#start").show();
+        $("#restart").show();
         console.log("The quiz is done. Your score is " + score);
         questionNumber = 0;
         score = 0;
+        $('#restart').click(function() {
+          location.reload();
+        });
       }
+      console.log("questionNumber is " + questionNumber);
     });
   });
 });
