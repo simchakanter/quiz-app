@@ -1,58 +1,50 @@
 // Set up the Question object
 
-function Question(name, options, answer) {
+function Question(name, options) {
   this.name = name;
   this.options = options;
-  this.answer = answer;
+  var self = this;
   this.validate = function(submission) {
-    if (submission === this.answer) {
-      return true;
-    } else {
-      return false;
-    }
+    return (self.options[submission][1]);
   };
 }
 // Create the data for the questions
 var question1 = new Question(
   "The purpose of a report is to",
   [
-    "Read it",
-    "Impress your boss with pretty charts",
-    "Take action to improve your business performance.",
-    "Get it done on time."
-  ],
-  "Take action to improve your business performance."
+    ["Read it", false],
+    ["Impress your boss with pretty charts", false],
+    ["Take action to improve your business performance.", true],
+    ["Get it done on time.", false]
+  ]
 );
 var question2 = new Question(
   "If someone is sitting at their desk, that means:",
   [
-    "They are productive.",
-    "They are delivering value for this company.",
-    "They are taking up space",
-    "They are lazy"
-  ],
-  "They are taking up space"
+    ["They are productive.", false],
+    ["They are delivering value for this company.", false],
+    ["They are taking up space", true],
+    ["They are lazy", false]
+  ]
 );
 var question3 = new Question(
   "Productivity is best measured by",
   [
-    "Emails written after 9PM",
-    "Hours spent in office",
-    "Reports generated",
-    "Value created"
-  ],
-  "Value created"
+    ["Emails written after 9PM", false],
+    ["Hours spent in office", false],
+    ["Reports generated", false],
+    ["Value created", true]
+  ]
 );
 
 var question4 = new Question(
   "The best way to tell if an idea is good is by",
   [
-    "Checking the person's job title",
-    "Making sure it will make me look good",
-    "Making sure that it won't get me in trouble",
-    "Testing it out in a creative, low-risk way"
-  ],
-  "Testing it out in a creative, low-risk way"
+    ["Checking the person's job title", false],
+    ["Making sure it will make me look good", false],
+    ["Making sure that it won't get me in trouble", false],
+    ["Testing it out in a creative, low-risk way", true]
+  ]
 );
 
 // Add all the questions to an array
@@ -68,14 +60,15 @@ $(document).ready(function() {
     $('#questions').show();
     $('#submit').click(function(event) {
       event.preventDefault();
-      var submittedAnswer = quizQuestions[questionNumber].options[$('input[name=response]:checked').val()];
-      if (quizQuestions[questionNumber].validate(submittedAnswer) === true ) {
+      var submittedAnswer = $('input[name=response]:checked').val();
+      console.log(submittedAnswer);
+      if ($('input[name=response]:checked').val() === undefined ){
+        console.log("No answer provided");
+        return;
+      } else if (quizQuestions[questionNumber].validate(submittedAnswer) === true ) {
         console.log("Correct");
         score++;
         console.log(score);
-      } else if ($('input[name=response]:checked').val() === undefined ){
-        console.log("No answer provided");
-        return;
       } else {
         console.log("Nope");
       }
@@ -87,8 +80,6 @@ $(document).ready(function() {
         $("#message").text("Done! Your score is " + score + " out of " + quizQuestions.length);
         $("#restart").show();
         console.log("The quiz is done. Your score is " + score);
-        questionNumber = 0;
-        score = 0;
         $('#restart').click(function() {
           location.reload();
         });
@@ -102,7 +93,7 @@ function loadQuestion(number) {
   $('#message').text(quizQuestions[number].name);
   $('#options-container').empty();
   for (var option in quizQuestions[number].options) {
-    $("<input type='radio' name='response' value=" + option + ">" + quizQuestions[number].options[option] + "<br>").appendTo('#options-container');
+    $("<input type='radio' name='response' id='" + option + "' value='" + option + "'><label for='" + option + "'>" + quizQuestions[number].options[option][0] + "</label><br>").appendTo('#options-container');
   }
   $('#count').text(number + 1);
 }
